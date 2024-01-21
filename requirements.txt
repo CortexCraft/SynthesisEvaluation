@@ -1,0 +1,7 @@
+librosa
+numpy
+onnxruntime
+pandas
+fastdtw
+pysptk
+pyworld
