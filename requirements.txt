@@ -5,3 +5,7 @@ pandas
 fastdtw
 pysptk
 pyworld
+resemblyzer
+transformers
+speechbrain
+jiwer

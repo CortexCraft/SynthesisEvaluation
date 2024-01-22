@@ -9,14 +9,10 @@ from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
 
 
-# ================================================= #
-# calculate the Mel-Cepstral Distortion (MCD) value #
-# ================================================= #
+# calculate the Mel-Cepstral Distortion (MCD)
 class Calculate_MCD(object):
-	"""docstring for Calculate_MCD"""
 	def __init__(self, MCD_mode):
 		super(Calculate_MCD, self).__init__()
-		# self.args = args
 		self.MCD_mode = MCD_mode
 		self.SAMPLING_RATE = 22050
 		self.FRAME_PERIOD = 5.0

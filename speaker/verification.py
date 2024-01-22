@@ -1,8 +1,8 @@
 import numpy as np
 import torch
-from resemblyzer import preprocess_wav, VoiceEncoder
+from speechbrain.pretrained import SpeakerRecognition
 
-_model = None # type: VoiceEncoder
+_tdnn_model = None # type: SpeakerRecognition
 _device = None # type: torch.device
 
 
@@ -18,22 +18,27 @@ def load_model(device=None):
     """
     # TODO: I think the slow loading of the encoder might have something to do with the device it
     #   was saved on. Worth investigating.
-    global _model, _device
+    global _tdnn_model, _device
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
         _device = torch.device(device)
     elif isinstance(device, str):
         _device = torch.device(device)
         
-    _model = VoiceEncoder().to(device)
-    _model.eval()
+    _tdnn_model = SpeakerRecognition.from_hparams(
+        source="speechbrain/spkrec-ecapa-voxceleb", 
+        savedir="pretrained_models/spkrec-ecapa-voxceleb",
+        run_opts={'device': device}
+    )
+
+    _tdnn_model.eval()
     print("Loaded Speaker encoder.")
 
 
 def is_loaded():
-    return _model is not None
+    return _tdnn_model is not None
 
-def utterance_similarity(wav_file, wav_file_ref):
+def verify_speaker(wav_file, wav_file_ref):
     """
     Args:
         wav_file: Path to audio wav file
@@ -42,10 +47,6 @@ def utterance_similarity(wav_file, wav_file_ref):
     returns:
         2D BNF vector (H, T)
     """ 
-    wav = preprocess_wav(wav_file)
-    wav_ref = preprocess_wav(wav_file_ref)
-    embed = _model.embed_utterance(wav)
-    embed_ref = _model.embed_utterance(wav_ref)
-    
-    utt_sim = embed @ embed_ref
-    return utt_sim
+    score, prediction = _tdnn_model.verify_files(wav_file, wav_file_ref)
+
+    return score, prediction

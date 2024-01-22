@@ -44,14 +44,14 @@ def is_loaded():
     return _model is not None
 
 @torch.no_grad()
-def generate_token_predictions(wav_file, sample_rate:int=16000):
+def generate_transcription(wav_file, sample_rate:int=16000):
     """
     Args:
         wav_file: Path to audio wav file
         sample_rate: target sample rate
     
     returns:
-        1D token IDs vector (T,)
+        (string): transcription for audio file
     """
     wave, sr = librosa.load(wav_file, sr=sample_rate)
     # tokenize
@@ -62,6 +62,6 @@ def generate_token_predictions(wav_file, sample_rate:int=16000):
 
     # take argmax and decode
     predicted_ids = torch.argmax(logits, dim=-1)
-    # transcription = processor.batch_decode(predicted_ids)
+    transcription = _processor.batch_decode(predicted_ids)
 
-    return predicted_ids.squeeze(0).cpu().numpy()
+    return transcription
