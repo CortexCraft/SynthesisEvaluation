@@ -87,7 +87,7 @@ class ComputeScore:
             predicted_mos_bak_seg.append(mos_bak)
             predicted_mos_ovr_seg.append(mos_ovr)
             predicted_p808_mos.append(p808_mos)
-            print(p808_mos)
+            # print(p808_mos)
 
         clip_dict = {'filename': fpath, 'len_in_sec': actual_audio_len/fs, 'sr':fs}
         clip_dict['num_hops'] = num_hops

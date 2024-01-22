@@ -32,7 +32,7 @@ def load_model(device=None):
     )
 
     _tdnn_model.eval()
-    print("Loaded Speaker encoder.")
+    print("Loaded Speaker Verification Model.")
 
 
 def is_loaded():
